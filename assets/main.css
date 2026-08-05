@@ -315,7 +315,7 @@ a { color: inherit; }
   border: 1px solid var(--border);
   border-top: 3px solid var(--heading);
   border-radius: 4px;
-  background: #f4f1ea;
+  background: var(--surface);
   font-family: var(--sans);
   font-size: .86rem;
 }
@@ -358,7 +358,7 @@ a { color: inherit; }
   flex-direction: column;
   gap: 5px;
   padding: 16px;
-  background: #f7f5ef;
+  background: var(--surface);
 }
 
 .decision-grid strong {
@@ -387,7 +387,7 @@ a { color: inherit; }
   padding: 18px 14px 15px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #f7f5ef;
+  background: var(--surface);
 }
 
 .skill-layers span {
@@ -425,7 +425,7 @@ a { color: inherit; }
   vertical-align: top;
 }
 
-.prose th { background: #eeece6; }
+.prose th { background: var(--inline-code); }
 
 .code-block {
   position: relative;
