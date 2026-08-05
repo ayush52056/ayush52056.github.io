@@ -1,0 +1,20 @@
+title: Ayush's Blog
+description: Notes about technology, projects, and things I learn along the way.
+author: Ayush
+url: "https://ayush52056.github.io"
+baseurl: ""
+
+theme: minima
+
+header_pages:
+  - about.md
+
+minima:
+  social_links:
+    - platform: github
+      user_url: "https://github.com/ayush52056"
+
+plugins:
+  - jekyll-feed
+
+show_excerpts: true
