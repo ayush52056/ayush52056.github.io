@@ -1,6 +1,8 @@
 title: Ayush's Blog
 description: Notes about technology, projects, and things I learn along the way.
 author: Ayush
+lang: en
+timezone: Asia/Kolkata
 url: "https://ayush52056.github.io"
 baseurl: ""
 
@@ -18,3 +20,6 @@ plugins:
   - jekyll-feed
 
 show_excerpts: true
+
+exclude:
+  - _templates

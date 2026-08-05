@@ -250,6 +250,78 @@ a { color: inherit; }
 
 .prose pre code { padding: 0; background: transparent; }
 
+.code-block {
+  position: relative;
+  margin: 1.7em -6px;
+  border-radius: 5px;
+  background: #242522;
+}
+
+.prose .code-block pre { margin: 0; padding-top: 48px; }
+
+.copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 9px;
+  border: 1px solid #555851;
+  border-radius: 3px;
+  background: #30322e;
+  color: #d9dbd5;
+  font: 600 .68rem/1 var(--sans);
+  cursor: pointer;
+}
+
+.copy-code:hover,
+.copy-code:focus-visible { border-color: #8b8f86; color: #fff; }
+
+.highlight .c,
+.highlight .cm,
+.highlight .c1,
+.highlight .cs { color: #91968c; font-style: italic; }
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt { color: #ff9575; }
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd { color: #b9d987; }
+.highlight .na,
+.highlight .nb,
+.highlight .nc,
+.highlight .nf { color: #8fc5ff; }
+.highlight .m,
+.highlight .mi,
+.highlight .mf { color: #e8bd77; }
+.highlight .o,
+.highlight .ow { color: #d8b8ff; }
+
+.archive-list { margin-top: 4px; }
+.archive-year { margin: 0 0 46px; }
+.archive-year h2 { margin: 0 0 12px; color: var(--heading); font-size: 1.25rem; }
+.archive-year ol { margin: 0; padding: 0; list-style: none; }
+.archive-year li {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+.archive-year time { padding-top: 3px; color: var(--muted); font: .68rem/1.5 var(--sans); text-transform: uppercase; }
+.archive-year a { color: var(--text); text-decoration: none; }
+.archive-year a:hover { color: var(--link); }
+
+.not-found { padding: 100px 0 140px; }
+.not-found h1 { margin: 0; font: 400 clamp(2.7rem, 12vw, 4.5rem)/1.05 var(--serif); letter-spacing: -.04em; }
+.not-found > p:not(.eyebrow) { max-width: 480px; margin: 24px 0; color: var(--muted); font-family: var(--serif); font-size: 1.12rem; }
+.not-found > a { color: var(--link); font-size: .85rem; text-underline-offset: 3px; }
+
 .article-footer {
   margin-top: 56px;
   padding-top: 22px;
@@ -287,7 +359,7 @@ a { color: inherit; }
   .shell { width: min(calc(100% - 32px), 760px); }
   .site-nav { gap: 14px; }
   .site-nav a { font-size: .74rem; }
-  .site-nav a:last-child { display: none; }
+  .site-nav .nav-github { display: none; }
   .intro { padding: 58px 0 52px; }
 }
 
