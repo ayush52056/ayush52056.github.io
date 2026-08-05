@@ -4,18 +4,38 @@ layout: default
 
 {% assign words = content | number_of_words %}
 {% assign minutes = words | divided_by: 180 | plus: 1 %}
+{% assign recent_posts = site.posts | where_exp: "post", "post.url != page.url" %}
 
-<article class="article shell">
-  <header class="article-header">
-    <div class="article-meta">
-      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%B %d, %Y' }}</time>
-      <span>{{ minutes }} min read</span>
-    </div>
-    <h1>{{ page.title | escape }}</h1>
-    {% if page.excerpt %}<p class="article-deck">{{ page.excerpt | strip_html }}</p>{% endif %}
-  </header>
+<article class="article shell{% if recent_posts.size > 0 %} article-with-sidebar{% endif %}">
+  <div class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%B %d, %Y' }}</time>
+        <span>{{ minutes }} min read</span>
+      </div>
+      <h1>{{ page.title | escape }}</h1>
+      {% if page.excerpt %}<p class="article-deck">{{ page.excerpt | strip_html }}</p>{% endif %}
+    </header>
 
-  <div class="prose">{{ content }}</div>
+    <div class="prose">{{ content }}</div>
+  </div>
+
+  {% if recent_posts.size > 0 %}
+    <aside class="recent-posts-card" aria-labelledby="recent-posts-title">
+      <div class="recent-posts-heading">
+        <p class="eyebrow" id="recent-posts-title">Recent writing</p>
+        <a href="{{ '/archive/' | relative_url }}">View archive</a>
+      </div>
+      <ol>
+        {% for post in recent_posts limit: 7 %}
+          <li>
+            <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d, %Y' }}</time>
+            <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          </li>
+        {% endfor %}
+      </ol>
+    </aside>
+  {% endif %}
 
   <footer class="article-footer">
     <a href="{{ '/' | relative_url }}">All posts</a>
