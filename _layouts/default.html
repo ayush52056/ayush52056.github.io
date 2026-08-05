@@ -5,7 +5,16 @@
     {% capture seo_title %}{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}{% endcapture %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#faf9f6">
+    <meta name="theme-color" content="#faf9f6" id="theme-color">
+    <script>
+      (function () {
+        try {
+          var savedTheme = localStorage.getItem("theme");
+          var theme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+        } catch (_error) {}
+      }());
+    </script>
     <title>{{ seo_title | strip | escape }}</title>
     <meta name="description" content="{{ seo_description | escape }}">
     <link rel="canonical" href="{{ page.url | replace: 'index.html', '' | absolute_url }}">
@@ -52,6 +61,7 @@
           <a href="{{ '/archive/' | relative_url }}"{% if page.url == '/archive/' %} aria-current="page"{% endif %}>Archive</a>
           <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
           <a class="nav-github" href="https://github.com/ayush52056">GitHub</a>
+          <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme"><span aria-hidden="true"></span></button>
         </nav>
       </div>
     </header>

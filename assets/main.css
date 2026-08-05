@@ -5,8 +5,27 @@
   --border: #d9d7d0;
   --link: #2457d6;
   --heading: #963f2d;
+  --surface: #f4f1ea;
+  --inline-code: #eeece6;
+  --code-background: #242522;
+  --code-text: #f7f5ef;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --serif: Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --background: #1c1c1a;
+  --text: #eeeae1;
+  --muted: #aaa69d;
+  --border: #3c3b36;
+  --link: #91adf4;
+  --heading: #d57962;
+  --surface: #25241f;
+  --inline-code: #302f2a;
+  --code-background: #111210;
+  --code-text: #f1eee7;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -65,6 +84,33 @@ a { color: inherit; }
 
 .site-nav a:hover,
 .site-nav a[aria-current="page"] { color: var(--text); }
+
+.theme-toggle {
+  width: 34px;
+  height: 20px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.theme-toggle span {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+:root[data-theme="dark"] .theme-toggle span {
+  background: var(--heading);
+  transform: translateX(14px);
+}
+
+.theme-toggle:hover span { background: var(--text); }
+.theme-toggle:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 
 .intro { padding: 70px 0 62px; }
 
@@ -235,7 +281,7 @@ a { color: inherit; }
 .prose code {
   padding: .15em .35em;
   border-radius: 3px;
-  background: #eeece6;
+  background: var(--inline-code);
   font: .84em ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
@@ -244,8 +290,8 @@ a { color: inherit; }
   margin: 1.7em -6px;
   padding: 17px;
   border-radius: 5px;
-  background: #242522;
-  color: #f7f5ef;
+  background: var(--code-background);
+  color: var(--code-text);
   font: .82rem/1.65 ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
@@ -385,7 +431,7 @@ a { color: inherit; }
   position: relative;
   margin: 1.7em -6px;
   border-radius: 5px;
-  background: #242522;
+  background: var(--code-background);
 }
 
 .prose .code-block pre { margin: 0; padding-top: 48px; }
@@ -458,7 +504,7 @@ a { color: inherit; }
   padding: 24px 26px 10px;
   border: 1px solid var(--border);
   border-top: 3px solid var(--heading);
-  background: #f4f1ea;
+  background: var(--surface);
 }
 
 .recent-posts-heading {
