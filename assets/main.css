@@ -159,16 +159,6 @@ a { color: inherit; }
   border-bottom: 1px solid var(--border);
 }
 
-.back-link {
-  display: inline-block;
-  margin-bottom: 40px;
-  color: var(--muted);
-  font-size: .78rem;
-  text-decoration: none;
-}
-
-.back-link:hover { color: var(--link); }
-
 .article-meta {
   display: flex;
   flex-wrap: wrap;
