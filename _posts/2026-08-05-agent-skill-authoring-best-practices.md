@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Building Reliable Agent Skills: An Evidence-Based Guide"
-date: 2026-08-05 17:00:00 +0530
+date: 2026-08-05 16:30:00 +0530
 categories: [ai, open-source]
 tags: [agents, skills, evaluation, security]
 excerpt: "A practical look at my open-source guide for designing Agent Skills that trigger reliably, run efficiently, and remain safe to maintain."
