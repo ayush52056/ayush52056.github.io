@@ -1,135 +1,438 @@
 ---
 layout: post
-title: "Building Reliable Agent Skills: An Evidence-Based Guide"
+title: "How to Write Agent Skills That Actually Work"
 date: 2026-08-05 16:30:00 +0530
 categories: [ai, open-source]
 tags: [agents, skills, evaluation, security]
-excerpt: "A practical look at my open-source guide for designing Agent Skills that trigger reliably, run efficiently, and remain safe to maintain."
+excerpt: "A complete, practical guide to understanding, designing, writing, testing, and maintaining reliable Agent Skills."
 ---
 
-Agent Skills can give an AI agent a repeatable workflow, specialized knowledge,
-or access to task-specific resources. Writing a file full of instructions is
-easy. Writing a skill that activates at the right time, produces better results,
-and remains safe to use is much harder.
+An AI agent can already write, reason, search, and use tools. But general ability
+does not guarantee that it will follow *your* process, remember specialized
+knowledge, or handle a fragile workflow consistently. That is the gap an Agent
+Skill is designed to fill.
 
-I created
-[Agent Skill Authoring Best Practices](https://github.com/ayush52056/agent-skill-authoring-best-practices)
-to make that process more systematic. It is an open-source, vendor-neutral guide
-to designing, testing, securing, and maintaining reliable Agent Skills.
+An Agent Skill is a small, self-contained package that teaches an agent how to
+handle a specific kind of task. It combines a precise description of when it
+should be used with an operational workflow and, when useful, supporting scripts,
+references, or reusable assets.
 
-## Why skill authoring needs a standard
+![A modular Agent Skill connecting workflow, references, scripts, and validation]({{ '/assets/agent-skill-system.webp' | relative_url }})
+{: .article-figure }
 
-A skill sits between an agent and a real task. Small design mistakes can have
-large effects:
+The difficult part is not creating a folder or writing instructions. It is
+designing a skill that activates for the right requests, stays out of unrelated
+work, improves the final result, uses context efficiently, and can be trusted
+with real tools and data. This guide explains how to do that from first
+principles.
 
-- A vague description can prevent the skill from triggering.
-- An overly broad description can make it activate for unrelated requests.
-- A long instruction file can waste context and obscure the actual workflow.
-- Missing validation can let the agent report success without evidence.
-- Unreviewed scripts and dependencies can introduce security risks.
+<nav class="article-toc" aria-labelledby="article-toc-title">
+  <p id="article-toc-title">In this guide</p>
+  <ol>
+    <li><a href="#what-is-an-agent-skill">What an Agent Skill is</a></li>
+    <li><a href="#when-should-you-create-a-skill">When to create one</a></li>
+    <li><a href="#the-anatomy-of-a-skill">The anatomy of a skill</a></li>
+    <li><a href="#how-to-write-a-skill-step-by-step">How to write one</a></li>
+    <li><a href="#how-to-test-an-agent-skill">How to test it</a></li>
+    <li><a href="#security-and-maintenance">Security and maintenance</a></li>
+  </ol>
+</nav>
 
-This means a useful skill needs more than good prose. It needs a clear contract,
-an intentional invocation policy, a practical workflow, and repeatable tests.
+## What is an Agent Skill?
 
-## The authoring workflow
+Think of a skill as an **on-demand operating manual for an agent**. The agent
+does not need every instruction for every task. Instead, it sees a short name
+and description, decides whether the skill matches the current request, and
+loads the full workflow only when needed.
 
-The repository organizes skill development into a sequence that can be followed
-from the first draft through ongoing maintenance.
+That gives skills three important properties:
 
-### 1. Define a recurring problem
+- **Conditional:** they are loaded for relevant tasks rather than placed in
+  every prompt.
+- **Operational:** they tell the agent how to act, decide, verify, and recover.
+  they are not merely background reading.
+- **Packaged:** the instructions can travel with scripts, references, templates,
+  examples, or other resources needed to complete the work.
 
-A skill should solve a problem that appears repeatedly or provide knowledge the
-agent would not reliably have on its own. If ordinary prompting already handles
-the task well, adding a skill can create complexity without improving results.
+For example, a test-diagnosis skill can teach an agent to reproduce the narrowest
+failure, isolate the first causal error, distinguish an environment problem from
+a code defect, and verify the smallest correction. A document skill might define
+how to use a house template, apply an editorial style, render the result, and
+inspect every page before reporting completion.
 
-### 2. Design the trigger
+### Why use skills instead of a longer prompt?
 
-The skill description is part of its interface. It should explain what the skill
-does, when it applies, and which user language should activate it. Important
-trigger terms belong near the beginning, where they are easy for an agent to
-recognize.
+A prompt handles one conversation. A skill captures a reusable capability. It
+is useful when the same workflow must work across tasks, people, or projects.
 
-Invocation also depends on risk. Low-risk workflows may be suitable for
-automatic activation, while actions with meaningful side effects should require
-an explicit user request.
+Skills also support **progressive disclosure**. The agent initially sees only
+small routing metadata. The core instructions are loaded after activation, and
+large or branch-specific references are loaded only if the workflow reaches
+them. This protects the limited context window from irrelevant detail.
 
-### 3. Write a workflow, not an essay
+Most importantly, a well-designed skill makes quality measurable. Its trigger
+behavior, workflow, safety boundaries, and completion evidence can all be tested.
 
-The central `SKILL.md` should help the agent act. It should contain the decisions,
-steps, constraints, and verification rules needed for the task. Longer
-background material belongs in references that are loaded only when relevant.
+## When should you create a skill?
 
-Repeatable or error-prone operations are better implemented as scripts. This
-reduces ambiguity and gives the workflow something concrete to validate.
+Create a skill when at least one of these conditions is true:
 
-### 4. Evaluate triggering and task quality
+- Agents repeatedly fail at a recognizable task.
+- A workflow has non-obvious ordering, branching, or recovery steps.
+- The work depends on organization-, product-, or domain-specific knowledge.
+- Deterministic scripts, references, or output templates should travel with the
+  workflow.
+- The guidance is useful only for certain requests and should not occupy every
+  prompt.
 
-Testing only the happy path is not enough. A skill should be evaluated against:
+Do not create a skill simply to collect generic advice, establish a persona, or
+repeat knowledge the model already applies reliably. A skill is also the wrong
+place for a rule that must *always* be enforced mechanically.
 
-- prompts that should trigger it;
-- nearby prompts that should not;
-- competing skills in the real catalog;
-- the same tasks without the skill as a baseline;
-- expected outputs and completion evidence.
+<div class="decision-grid" role="group" aria-label="Choosing the right agent extension">
+  <div><strong>Always-relevant convention</strong><span>Repository instructions</span></div>
+  <div><strong>Conditional workflow</strong><span>Agent Skill</span></div>
+  <div><strong>Current remote data or action</strong><span>Tool or MCP server</span></div>
+  <div><strong>Repeated exact transformation</strong><span>Script</span></div>
+  <div><strong>Rule that cannot be optional</strong><span>Test, policy, or hook</span></div>
+  <div><strong>Large independent task</strong><span>Subagent or separate task</span></div>
+</div>
 
-The repository includes starter fixtures for trigger evaluations and task
-evaluations, making these comparisons easier to reproduce.
+A useful test is: **what observable problem will this skill correct?** If you
+cannot name a failure, missing capability, or reusable operation, first collect
+real examples instead of writing speculative instructions.
 
-### 5. Treat skills as dependencies
+## The anatomy of a skill
 
-A skill can contain instructions, scripts, references, and assets. Each part
-should be reviewed with the same care as a software dependency. Permissions
-should be narrow, untrusted inputs should remain untrusted, and consequential
-actions should require appropriate confirmation.
+The portable baseline is deliberately small:
 
-Skills also need lifecycle management. Changes to models, tools, hosts, or
-policies can change how a skill behaves. Re-testing is therefore part of
-maintenance—not a one-time release task.
-
-## What the repository provides
-
-The project includes:
-
-- a canonical authoring standard;
-- a scored quality rubric with hard gates;
-- trigger and task evaluation methods;
-- invocation and skill-portfolio guidance;
-- security and governance controls;
-- a portable `SKILL.md` template;
-- evaluation fixtures;
-- a worked diagnostic skill example;
-- a structural validator with automated tests;
-- an evidence map connecting recommendations to their sources.
-
-The baseline follows the open Agent Skills convention: a skill is a directory
-containing a `SKILL.md` file with `name` and `description` front matter, plus
-optional `scripts`, `references`, and `assets` directories.
-
-## Getting started
-
-Clone the repository, copy the portable template, and adapt it to one focused
-problem. After drafting the skill, score it with the quality rubric and run the
-included evaluation fixtures. The package can then be checked with:
-
-```shell
-python scripts/validate_skill.py path/to/skill
+```text
+my-skill/
+├── SKILL.md        # routing metadata and core workflow
+├── scripts/        # optional deterministic operations
+├── references/     # optional detail loaded when needed
+└── assets/         # optional templates and output resources
 ```
 
-The validator catches structural problems, while the evaluation process tests
-whether the skill actually improves agent behavior. Both are necessary: a valid
-package is not automatically an effective one.
+### `SKILL.md`: the required core
 
-## Evidence over popularity
+`SKILL.md` begins with YAML front matter containing a `name` and `description`,
+followed by the instructions the agent should apply after the skill is selected.
 
-One principle guides the project: popularity is not proof. Recommendations are
-linked to specifications, trusted production implementations, published
-research, or repeatable evaluations. When sources disagree, the guide records
-the tradeoff instead of presenting a universal rule.
+```yaml
+---
+name: diagnose-test-failures
+description: Diagnose failing or flaky automated tests by reproducing the
+  failure, isolating the first causal error, and verifying the smallest
+  corrective change. Use when tests fail locally or in CI, a user asks why a
+  suite is failing, or intermittent test behavior needs root-cause analysis.
+---
+```
 
-That approach turns skill authoring from trial and error into an engineering
-discipline: define the behavior, test it, verify the result, and keep checking
-that the skill still earns its place.
+The name is an identifier. The description is much more important: it is the
+skill's routing interface. It must communicate both **what the skill does** and
+**when it should run**.
 
-The project is available under the Apache 2.0 license. Explore the guide,
-templates, and validation tools on
-[GitHub](https://github.com/ayush52056/agent-skill-authoring-best-practices).
+The body contains the behavioral contract: required inputs, expected outputs,
+workflow, decisions, validation, failure behavior, safety limits, and pointers
+to optional resources.
+
+### Scripts, references, and assets
+
+- Put an operation in `scripts/` when it is repeated, fragile, or mechanically
+  verifiable. A script should validate inputs, fail with useful errors, avoid
+  hidden side effects, and be tested by execution.
+- Put large schemas, domain documentation, extended examples, and uncommon
+  workflow branches in `references/`. Every reference should be linked directly
+  from `SKILL.md` with a clear instruction describing *when* to read it.
+- Put output templates, boilerplate, images, fonts, and reusable starter files
+  in `assets/`. They are materials for producing the result, not instructions
+  that must always enter the model's context.
+
+<div class="skill-layers" aria-label="Progressive disclosure in an Agent Skill">
+  <div><span>1</span><strong>Name + description</strong><small>Always visible for routing</small></div>
+  <div><span>2</span><strong>Core workflow</strong><small>Loaded after activation</small></div>
+  <div><span>3</span><strong>Resources</strong><small>Loaded only for the relevant branch</small></div>
+</div>
+
+This layered structure is not merely tidier. It prevents a large skill from
+crowding out the user's request, repository context, and tool results.
+
+## How to write a skill, step by step
+
+### 1. Start with observed behavior
+
+Before writing instructions, collect concrete examples:
+
+1. Prompts that should activate the skill.
+2. Nearby prompts that should not activate it.
+3. A representative task the agent currently mishandles.
+4. The visible failure, such as a skipped check, unsafe action, wrong order, or
+   missing domain fact.
+5. The evidence that would prove the result has improved.
+
+Starting from behavior keeps the skill focused on an actual capability gap.
+
+### 2. Define the behavioral contract
+
+Write down the contract before the detailed workflow:
+
+| Part | Question to answer |
+|---|---|
+| Inputs | What information or artifacts are required to begin? |
+| Outputs | What files, decisions, reports, or state will be produced? |
+| Invariants | What must remain true throughout the task? |
+| Workflow | Which steps and branches lead to the result? |
+| Validation | What observable evidence proves completion? |
+| Failure behavior | What happens when an input, permission, tool, or check is missing? |
+| Boundaries | Which adjacent tasks does this skill intentionally not own? |
+
+For a test-diagnosis skill, an invariant might be “do not weaken a check or
+change unrelated code.” Completion might require the original failing command
+to pass, or a diagnosis supported by an error trace when a fix is out of scope.
+
+### 3. Write a precise trigger description
+
+A weak description such as “helps with testing and code quality” creates two
+problems: relevant prompts may not match it, and unrelated prompts may activate
+it. A strong description starts with the distinctive action, names the artifact
+or outcome, and includes realistic situations users describe.
+
+Use these rules:
+
+- Put the most distinctive action and trigger terms near the beginning.
+- Use language that users actually say.
+- Keep one coherent intent per skill.
+- Include adjacent cases only when the same workflow handles them.
+- Avoid promotional claims such as “expert” or “best-in-class.”
+- Compare the description with neighboring skills so their boundaries are clear.
+- Keep host-specific invocation syntax out of the portable description.
+
+Choose the invocation policy based on risk. Automatic discovery is convenient
+for routine, low-risk work. Explicit invocation is safer for destructive,
+expensive, privileged, security-sensitive, or production-impacting actions. A
+skill may support both, but both paths should lead to the same contract.
+
+### 4. Write an executable workflow, not an essay
+
+Use imperative instructions that tell the agent what to inspect, how to choose a
+branch, what proves each stage is complete, and what to do when evidence is
+missing.
+
+Weak instruction:
+
+> Carefully inspect the implementation and follow best practices.
+
+Stronger instruction:
+
+> Inspect the changed public interfaces, run the narrowest affected tests, and
+> report every unresolved failure with its command and first causal error.
+
+The stronger version is observable. It defines an action, scope, validation,
+and reporting requirement without hardcoding one repository's commands.
+
+Give the agent one preferred path. Add a branch only when it materially changes
+the work. Too many equal options force the model to rediscover the workflow on
+every invocation.
+
+### 5. Match freedom to risk
+
+Not every task needs the same rigidity.
+
+- **High freedom:** heuristics and goals for research, writing, or design tasks
+  with many valid solutions.
+- **Medium freedom:** ordered steps, decision tables, pseudocode, and
+  parameterized commands.
+- **Low freedom:** fixed gates, validated scripts, narrow parameters, previews,
+  and explicit approvals.
+
+Use less freedom as consequences increase. Deployments, migrations, credentials,
+security, compliance, destructive changes, and irreversible external actions
+need tight scopes and explicit stop conditions.
+
+### 6. Keep the core concise
+
+Treat context like a shared budget. Keep `SKILL.md` focused on the workflow the
+agent usually needs. Move variant-specific or long-form material into references
+and avoid chains where one reference merely points to another.
+
+“Read the references folder” is not useful routing. Prefer a conditional
+instruction such as: “Read `references/api-errors.md` only after an API request
+returns a non-success status.”
+
+During testing, observe which resources are actually loaded. Move repeatedly
+needed guidance into the core. Improve routing for resources that are skipped.
+delete resources that never contribute.
+
+### 7. Define “done” with evidence
+
+A tool returning successfully does not prove the task succeeded. Depending on
+the work, completion evidence may include:
+
+- exact test or check outcomes
+- an inspected diff
+- schema or syntax validation
+- a rendered and visually inspected artifact
+- a dry run before an external mutation
+- verification of final state after the mutation
+- an explicit list of checks that could not be performed.
+
+Never let the skill turn “attempted” into “complete.” When validation cannot
+run, the agent should report the limitation and keep the result unverified.
+
+## A compact skill example
+
+This simplified example shows the shape of a useful core file:
+
+```markdown
+---
+name: diagnose-test-failures
+description: Diagnose failing or flaky automated tests by reproducing the
+  failure, isolating the first causal error, and verifying the smallest
+  correction. Use when tests fail locally or in CI.
+---
+
+# Diagnose test failures
+
+## Inputs
+- A failing command, test name, CI run, or error report.
+
+## Workflow
+1. Read project instructions and identify the narrowest reproducing command.
+2. Run it without modifying code. Preserve the exit status and first causal error.
+3. Classify the failure as environment, dependency, product code, test code,
+   or intermittent behavior.
+4. Reduce the scope or add temporary observation when the cause is unclear.
+5. Explain the root cause using evidence from the responsible code path.
+6. If a fix was requested, make the smallest complete correction.
+7. Re-run the original reproduction and the narrowest surrounding tests.
+
+## Validation
+- Require the original failure to pass after a fix.
+- Do not count a skipped, weakened, or removed test as a repair.
+- Report commands, outcomes, changed files, and remaining uncertainty.
+
+## Safety
+- Preserve unrelated changes.
+- Never weaken a check merely to produce a passing result.
+```
+
+Notice what is absent: a persona, a long explanation of software testing, rigid
+commands that may not exist in the project, and an unsupported promise of
+success. The file gives the agent a focused procedure while leaving room to
+adapt to the repository.
+
+## How to test an Agent Skill
+
+Skill evaluation asks two different questions:
+
+1. **Did the right skill load for the right request?**
+2. **Once loaded, did it improve the task enough to justify its context and risk?**
+
+### Test routing separately
+
+Build a trigger suite with three groups:
+
+- **Positive prompts:** varied wording that should activate the skill.
+- **Negative prompts:** nearby tasks that should not activate it.
+- **Boundary prompts:** incomplete or ambiguous requests where the expected
+  choice must be documented.
+
+Near misses matter more than obviously irrelevant prompts. A test-diagnosis
+skill should be compared with prompts about writing new tests, reviewing general
+code quality, or optimizing CI speed. Do not use prompts about cooking dinner.
+
+Test the skill alone, beside its closest competitors, and inside the realistic
+catalog. A description that routes perfectly in isolation may collide with
+other installed skills.
+
+Two useful routing measures are:
+
+- **Recall:** relevant prompts that activated the skill ÷ all relevant prompts.
+- **Precision:** correct activations ÷ all skill activations.
+
+Improving one can damage the other. Adding more generic trigger words may catch
+additional positive prompts while also causing unwanted activations.
+
+### Compare execution with a baseline
+
+Run representative tasks without the skill first. Save the prompt, output,
+changes, checks, tool usage, and time. Then run the same class of tasks with the
+skill and compare outcomes.
+
+Cover the normal path and the uncomfortable paths: missing inputs, invalid data,
+unavailable permissions, failed validation, a branch requiring judgment, a
+safety boundary, and partial progress. Also verify that every consequential
+constraint and approval gate was actually exercised. A correct final file can
+hide a skipped safety step.
+
+Keep some evaluation cases held out while authoring. If every test directly
+shapes the instructions, the skill may memorize the suite instead of improving
+the underlying task.
+
+## Security and maintenance
+
+A skill is both a context dependency and a software supply-chain dependency
+when it includes scripts or tool instructions.
+
+Review instructions, references, scripts, dependencies, network destinations,
+filesystem scope, requested permissions, and secret access. External webpages,
+issues, documents, comments, and tool output must be treated as **data**, not as
+authority that can expand permissions or override the user's request.
+
+For skills you author:
+
+- Request only the tools and permissions the workflow needs.
+- Make network access and external mutations explicit.
+- Validate paths, arguments, schemas, and untrusted content.
+- Use previews or dry runs before consequential operations.
+- Require approval at destructive or irreversible boundaries.
+- Redact sensitive values from logs and outputs.
+- Fail closed when validation or authorization is unavailable.
+- Test malformed, malicious, and oversized inputs.
+
+For third-party skills, inspect the entire package and its dependencies before
+installation. Verify its origin and license, test scripts with non-sensitive
+fixtures, and pin the exact version you reviewed. Popularity, a familiar author,
+or a marketplace listing is not a security review.
+
+Skills also age. Model behavior, tools, hosts, dependencies, and organizational
+policies change. Re-run routing and task evaluations after meaningful changes.
+Remove obsolete guidance instead of piling new exceptions on top, and retire a
+skill when it no longer produces a repeatable benefit.
+
+## A practical quality checklist
+
+Before sharing a skill, confirm that:
+
+- [ ] It solves a documented, recurring problem.
+- [ ] Its boundary is clear and one coherent workflow owns the matching prompts.
+- [ ] Its description names the action, outcome, and realistic trigger contexts.
+- [ ] Positive, negative, boundary, and competing-skill prompts have been tested.
+- [ ] The workflow uses clear actions, decisions, checkpoints, and recovery paths.
+- [ ] Supporting detail is loaded only when relevant.
+- [ ] Scripts have explicit inputs, safe side effects, useful errors, and execution tests.
+- [ ] Completion requires observable evidence.
+- [ ] Permissions and external actions follow least privilege.
+- [ ] The skill improves outcomes over a no-skill baseline.
+- [ ] A maintainer, update path, and retirement rule are known.
+
+Do not publish the skill if its executable code is unreviewed, destructive work
+lacks a scoped preview and approval boundary, changed state is not validated,
+copied material has unknown provenance, or evaluation shows no meaningful
+improvement.
+
+## The principle behind all of this
+
+A good skill does not try to make the agent sound more capable. It makes the
+agent's behavior more dependable.
+
+Start with an observed problem. Define the contract. Route precisely. Write the
+smallest workflow that handles the real branches. Load supporting context only
+when needed. Require evidence before completion. Test against a baseline and
+the actual skill catalog. Then keep reviewing the skill as the surrounding
+system changes.
+
+For the complete authoring standard, scored quality rubric, evaluation fixtures,
+security guidance, portable template, and worked example, see the open-source
+[Agent Skill Authoring Best Practices repository](https://github.com/ayush52056/agent-skill-authoring-best-practices).
