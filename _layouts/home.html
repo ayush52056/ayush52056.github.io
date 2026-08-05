@@ -1,0 +1,30 @@
+---
+layout: default
+---
+
+<section class="intro shell">
+  <p class="eyebrow">Personal blog</p>
+  <h1>Hi, I'm Ayush.</h1>
+  <div class="intro-copy">{{ content }}</div>
+</section>
+
+<section class="posts-section shell">
+  <div class="section-heading">
+    <h2>Writing</h2>
+  </div>
+
+  <div class="post-list">
+    {% for post in site.posts %}
+      {% assign words = post.content | number_of_words %}
+      {% assign minutes = words | divided_by: 180 | plus: 1 %}
+      <article class="post-row">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %Y' }}</time>
+        <div class="post-summary">
+          <h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
+          <p>{{ post.excerpt | strip_html | normalize_whitespace | truncate: 190 }}</p>
+          <span class="reading-time">{{ minutes }} min read</span>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>

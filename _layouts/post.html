@@ -1,0 +1,24 @@
+---
+layout: default
+---
+
+{% assign words = content | number_of_words %}
+{% assign minutes = words | divided_by: 180 | plus: 1 %}
+
+<article class="article shell">
+  <header class="article-header">
+    <a class="back-link" href="{{ '/' | relative_url }}">← Writing</a>
+    <div class="article-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%B %d, %Y' }}</time>
+      <span>{{ minutes }} min read</span>
+    </div>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.excerpt %}<p class="article-deck">{{ page.excerpt | strip_html }}</p>{% endif %}
+  </header>
+
+  <div class="prose">{{ content }}</div>
+
+  <footer class="article-footer">
+    <a href="{{ '/' | relative_url }}">← Back to all posts</a>
+  </footer>
+</article>
