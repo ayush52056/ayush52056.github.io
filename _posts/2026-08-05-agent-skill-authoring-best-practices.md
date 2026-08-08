@@ -17,14 +17,16 @@ handle a specific kind of task. It combines a precise description of when it
 should be used with an operational workflow and, when useful, supporting scripts,
 references, or reusable assets.
 
+I built the guide behind this article to turn those ideas into a process that
+people can inspect, test, and improve instead of relying on trial and error.
+
 ![A modular Agent Skill connecting workflow, references, scripts, and validation]({{ '/assets/agent-skill-system.webp' | relative_url }})
 {: .article-figure }
 
-The difficult part is not creating a folder or writing instructions. It is
-designing a skill that activates for the right requests, stays out of unrelated
-work, improves the final result, uses context efficiently, and can be trusted
-with real tools and data. This guide explains how to do that from first
-principles.
+Creating the folder is easy. The real work is making sure the skill appears for
+the right requests, stays out of unrelated tasks, and improves the result. It
+also needs to use context carefully and remain safe around real tools and data.
+This guide explains how to get those parts right.
 
 <nav class="article-toc" aria-labelledby="article-toc-title">
   <p id="article-toc-title">In this guide</p>
@@ -50,7 +52,7 @@ That gives skills three important properties:
 - **Conditional:** they are loaded for relevant tasks rather than placed in
   every prompt.
 - **Operational:** they tell the agent how to act, decide, verify, and recover.
-  they are not merely background reading.
+  They are not merely background reading.
 - **Packaged:** the instructions can travel with scripts, references, templates,
   examples, or other resources needed to complete the work.
 
@@ -65,10 +67,11 @@ inspect every page before reporting completion.
 A prompt handles one conversation. A skill captures a reusable capability. It
 is useful when the same workflow must work across tasks, people, or projects.
 
-Skills also support **progressive disclosure**. The agent initially sees only
-small routing metadata. The core instructions are loaded after activation, and
-large or branch-specific references are loaded only if the workflow reaches
-them. This protects the limited context window from irrelevant detail.
+Skills also support **progressive disclosure**, which simply means showing
+detail only when it becomes useful. The agent first sees a short name and
+description. It loads the core instructions after choosing the skill, then reads
+larger references only when the task reaches the relevant branch. This keeps
+unrelated detail out of the way.
 
 Most importantly, a well-designed skill makes quality measurable. Its trigger
 behavior, workflow, safety boundaries, and completion evidence can all be tested.
@@ -98,9 +101,9 @@ place for a rule that must *always* be enforced mechanically.
   <div><strong>Large independent task</strong><span>Subagent or separate task</span></div>
 </div>
 
-A useful test is: **what observable problem will this skill correct?** If you
-cannot name a failure, missing capability, or reusable operation, first collect
-real examples instead of writing speculative instructions.
+Ask one simple question: **what observable problem will this skill correct?** If
+you cannot name a failure, missing capability, or reusable operation, collect a
+few real examples before writing instructions.
 
 ## The anatomy of a skill
 
@@ -113,6 +116,11 @@ my-skill/
 ├── references/     # optional detail loaded when needed
 └── assets/         # optional templates and output resources
 ```
+
+Keep this portable core separate from settings that work only in one agent
+platform. The open format also supports optional `license`, `compatibility`,
+`metadata`, and experimental `allowed-tools` fields. Interface labels, model
+settings, and tool bindings should follow the platform's own documentation.
 
 ### `SKILL.md`: the required core
 
@@ -133,15 +141,17 @@ The name is an identifier. The description is much more important: it is the
 skill's routing interface. It must communicate both **what the skill does** and
 **when it should run**.
 
-The body contains the behavioral contract: required inputs, expected outputs,
-workflow, decisions, validation, failure behavior, safety limits, and pointers
-to optional resources.
+The body is the working agreement. It explains what goes in, what should come
+out, which steps to follow, how to make important decisions, how to check the
+result, and what to do when something fails.
 
 ### Scripts, references, and assets
 
 - Put an operation in `scripts/` when it is repeated, fragile, or mechanically
   verifiable. A script should validate inputs, fail with useful errors, avoid
-  hidden side effects, and be tested by execution.
+  hidden side effects, and be tested by execution. It should also run without
+  interaction, use documented exit codes, support a dry run for risky work, and
+  limit or redirect unusually large output.
 - Put large schemas, domain documentation, extended examples, and uncommon
   workflow branches in `references/`. Every reference should be linked directly
   from `SKILL.md` with a clear instruction describing *when* to read it.
@@ -162,7 +172,10 @@ crowding out the user's request, repository context, and tool results.
 
 ### 1. Start with observed behavior
 
-Before writing instructions, collect concrete examples:
+Before writing instructions, collect evidence from completed work. Useful
+sources include successful runs, user corrections, review comments, tool traces,
+issue history, previous fixes, and repeated explanations. Then record concrete
+examples:
 
 1. Prompts that should activate the skill.
 2. Nearby prompts that should not activate it.
@@ -208,10 +221,10 @@ Use these rules:
 - Compare the description with neighboring skills so their boundaries are clear.
 - Keep host-specific invocation syntax out of the portable description.
 
-Choose the invocation policy based on risk. Automatic discovery is convenient
-for routine, low-risk work. Explicit invocation is safer for destructive,
+Invocation is simply how the skill starts. Automatic selection is convenient
+for routine, low-risk work. A direct user request is safer for destructive,
 expensive, privileged, security-sensitive, or production-impacting actions. A
-skill may support both, but both paths should lead to the same contract.
+skill may support both paths, but they should lead to the same workflow.
 
 ### 4. Write an executable workflow, not an essay
 
@@ -235,7 +248,7 @@ Give the agent one preferred path. Add a branch only when it materially changes
 the work. Too many equal options force the model to rediscover the workflow on
 every invocation.
 
-### 5. Match freedom to risk
+### 5. Decide how strict the skill should be
 
 Not every task needs the same rigidity.
 
@@ -262,7 +275,7 @@ returns a non-success status.”
 
 During testing, observe which resources are actually loaded. Move repeatedly
 needed guidance into the core. Improve routing for resources that are skipped.
-delete resources that never contribute.
+Delete resources that never contribute.
 
 ### 7. Define “done” with evidence
 
@@ -370,10 +383,17 @@ Keep some evaluation cases held out while authoring. If every test directly
 shapes the instructions, the skill may memorize the suite instead of improving
 the underlying task.
 
+You do not need a huge test suite to begin. Start with roughly 8 to 10 prompts
+that should select the skill and another 8 to 10 that should not. Set some aside
+before editing the description, repeat each query, and finish with fresh prompts.
+Keep separate results for each agent platform, model, and way of starting the
+skill. Save the prompts, outputs, traces, scores, and timing so you can explain
+why one version worked better.
+
 ## Security and maintenance
 
-A skill is both a context dependency and a software supply-chain dependency
-when it includes scripts or tool instructions.
+A skill may look like a document, but it should be reviewed like software when
+it includes scripts or instructions for using tools.
 
 Review instructions, references, scripts, dependencies, network destinations,
 filesystem scope, requested permissions, and secret access. External webpages,
@@ -383,6 +403,10 @@ authority that can expand permissions or override the user's request.
 For skills you author:
 
 - Request only the tools and permissions the workflow needs.
+- Treat dynamic shell injection as code execution and never interpolate
+  untrusted text into its commands.
+- Do not assume `allowed-tools` creates a restrictive sandbox. Review its exact
+  permission effect on the target host.
 - Make network access and external mutations explicit.
 - Validate paths, arguments, schemas, and untrusted content.
 - Use previews or dry runs before consequential operations.
@@ -427,12 +451,16 @@ improvement.
 A good skill does not try to make the agent sound more capable. It makes the
 agent's behavior more dependable.
 
+That is the standard I wanted for this project. Every recommendation should
+lead to behavior that someone can observe, test, and maintain.
+
 Start with an observed problem. Define the contract. Route precisely. Write the
 smallest workflow that handles the real branches. Load supporting context only
 when needed. Require evidence before completion. Test against a baseline and
 the actual skill catalog. Then keep reviewing the skill as the surrounding
 system changes.
 
-For the complete authoring standard, scored quality rubric, evaluation fixtures,
-security guidance, portable template, and worked example, see the open-source
+For the complete authoring standard, scored quality rubric, trigger evaluation
+template, task evaluation method, security guidance, portable template, and
+worked example, see the open-source
 [Agent Skill Authoring Best Practices repository](https://github.com/ayush52056/agent-skill-authoring-best-practices).
