@@ -8,17 +8,17 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
 <header class="resume-hero" id="profile">
   <p class="resume-role">Technical Lead · AI & Backend Engineering</p>
   <h1>Ayush<br>Singh<span>.</span></h1>
-  <p class="resume-summary">I build production systems at the intersection of agentic AI, retrieval, and backend engineering, from document-to-diagram workflows to multi-agent orchestration and developer tooling.</p>
+  <p class="resume-summary">Technical Lead with 5+ years of experience building AI-powered applications and scalable backend services. Specializes in agentic workflows, RAG, MCP integrations, FastAPI, and React, with a track record of turning complex requirements and unstructured documents into reliable tools, APIs, and decision-ready outputs.</p>
   <div class="resume-contact" aria-label="Contact links">
     <a href="mailto:ayush.52056@gmail.com">Email</a>
     <a href="https://www.linkedin.com/in/ayush-singh-601951188/">LinkedIn</a>
     <a href="https://github.com/ayush52056">GitHub</a>
-    <a href="tel:+919412722190">+91 94127 22190</a>
+    <a href="tel:+919412722190">+91 9412722190</a>
   </div>
 </header>
 
 <section class="resume-section" id="experience">
-  <div class="resume-section-title"><h2>Experience</h2></div>
+  <div class="resume-section-title"><h2>Professional Experience</h2></div>
 
   <article class="experience-item">
     <div class="experience-meta"><time>Jul 2026 - Present</time><span>Noida, India</span></div>
@@ -68,11 +68,11 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
 <section class="resume-section" id="skills">
   <div class="resume-section-title"><h2>Capabilities</h2></div>
   <div class="capability-grid">
-    <div><p>01 / Engineering</p><h3>Python, SQL, JavaScript, React, FastAPI, REST APIs, OOP, MongoDB, system design</h3></div>
-    <div><p>02 / Generative AI</p><h3>LLMs, Azure OpenAI, RAG, agentic AI, context and prompt engineering, tool calling, LangChain, LangGraph</h3></div>
-    <div><p>03 / Retrieval & tools</p><h3>MCP, A2A, ADK, embeddings, vector search, ingestion pipelines, OpenSearch, FAISS, ChromaDB, RAGAS</h3></div>
-    <div><p>04 / Cloud & delivery</p><h3>Azure, AWS Lambda, S3, ECS, Glue, Docker, Terraform, Jenkins, CI/CD, Git, Linux</h3></div>
-    <div><p>05 / AI operations</p><h3>Model deployment, LLM evaluation and observability, OpenTelemetry, guardrails, AI safety</h3></div>
+    <div><p>Engineering</p><h3>Python, SQL, JavaScript, React, FastAPI, REST APIs, OOP, MongoDB, system design</h3></div>
+    <div><p>Generative AI</p><h3>LLMs, Azure OpenAI, RAG, agentic AI, context and prompt engineering, tool calling, LangChain, LangGraph</h3></div>
+    <div><p>Retrieval & tools</p><h3>MCP, A2A, ADK, embeddings, vector search, ingestion pipelines, OpenSearch, FAISS, ChromaDB, RAGAS</h3></div>
+    <div><p>Cloud & delivery</p><h3>Azure, AWS Lambda, S3, ECS, Glue, Docker, Terraform, Jenkins, CI/CD, Git, Linux</h3></div>
+    <div><p>AI operations</p><h3>Model deployment, LLM evaluation and observability, OpenTelemetry, guardrails, AI safety</h3></div>
   </div>
 </section>
 
@@ -103,8 +103,8 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
 <section class="resume-section" id="recognition">
   <div class="resume-section-title"><h2>Recognition</h2></div>
   <ul class="recognition-list">
-    <li><span>Microsoft</span><p>Azure Solutions Architect Expert, Azure Administrator Associate, Azure AI Fundamentals, Azure Data Fundamentals, and Azure Fundamentals</p></li>
-    <li><span>AWS</span><p>Certified AI Practitioner</p></li>
+    <li><span>Microsoft</span><p>Azure Solutions Architect Expert (AZ-305), Azure Administrator Associate (AZ-104), Azure AI Fundamentals (AI-900), Azure Data Fundamentals (DP-900), and Azure Fundamentals (AZ-900)</p></li>
+    <li><span>AWS</span><p>Certified AI Practitioner (AIF-C01)</p></li>
     <li><span>Teaching</span><p>Mentored more than 1,500 students in advanced Python and Generative AI.</p></li>
     <li><span>AI4ICPS</span><p>Merit certificate in Hands-on Approach to AI from IIT Kharagpur, November 2024.</p></li>
     <li><span>Hackathons</span><p>Winner of Microsoft’s Get Set Azure! Edition 2; first at SPARK-18 and third at SPARK-19.</p></li>
