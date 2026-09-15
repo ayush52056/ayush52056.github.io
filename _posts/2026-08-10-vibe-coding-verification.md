@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibe Coding Is Easy. But How Do You Know the Code Works?"
-date: "2026-08-11 12:30:00 +0530"
+date: "2026-09-15 21:15:00 +0530"
 categories: [ai, development]
 tags: [vibe-coding, ai-coding, testing, code-review]
 excerpt: "Learn a simple verification process for deciding whether AI-generated code is ready to trust, share, or release."
