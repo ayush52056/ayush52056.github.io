@@ -743,3 +743,43 @@ a { color: inherit; }
   .education-row > div:last-child { text-align: left; }
   .recognition-list li { grid-template-columns: 1fr; gap: 7px; }
 }
+
+/* Simple resume layout */
+.resume-shell {
+  display: block;
+  width: min(calc(100% - 40px), 760px);
+  padding: 72px 0 100px;
+}
+
+.resume-hero { padding-bottom: 64px; }
+.resume-role { margin-bottom: 16px; color: var(--muted); font-size: .8rem; }
+.resume-hero h1 { font-size: clamp(3rem, 9vw, 5rem); line-height: .95; letter-spacing: -.05em; }
+.resume-summary { max-width: 650px; margin: 28px 0 22px; font-size: 1.18rem; line-height: 1.55; }
+.resume-contact { gap: 8px 18px; }
+.resume-contact a { color: var(--link); font-size: .84rem; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.resume-section { padding: 52px 0; }
+.resume-section-title { margin-bottom: 34px; }
+.resume-section-title h2 { font-size: 1.8rem; }
+.experience-item { grid-template-columns: 140px minmax(0, 1fr); gap: 28px; padding-bottom: 46px; }
+.experience-body h3 { font-size: 1.3rem; }
+.experience-body li { font-size: 1rem; }
+.tech-list { gap: 5px 14px; }
+.tech-list span { padding: 0; border: 0; border-radius: 0; font-size: .75rem; }
+.capability-grid { display: block; border: 0; }
+.capability-grid div { min-height: 0; padding: 20px 0; border: 0; border-bottom: 1px solid var(--border); }
+.capability-grid div:first-child { border-top: 1px solid var(--border); }
+.capability-grid p { margin: 0 0 8px; }
+.capability-grid h3 { font-size: 1rem; }
+.project-grid { display: block; }
+.project-card { min-height: 0; padding: 24px 0; border: 0; border-bottom: 1px solid var(--border); background: transparent; }
+.project-card:first-child { border-top: 1px solid var(--border); }
+.project-card:hover { transform: none; border-color: var(--border); }
+.project-card h3 { margin: 9px 0; font-size: 1.35rem; }
+.project-card small { margin-top: 12px; padding: 0; }
+
+@media (max-width: 760px) {
+  .resume-shell { width: min(calc(100% - 32px), 760px); padding: 52px 0 80px; }
+  .resume-hero { padding-bottom: 52px; }
+  .experience-item { grid-template-columns: 1fr; gap: 12px; }
+  .experience-meta span { display: block; }
+}

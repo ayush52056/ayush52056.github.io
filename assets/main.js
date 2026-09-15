@@ -57,21 +57,4 @@ document.addEventListener("DOMContentLoaded", () => {
     container.append(button);
   });
 
-  const resumeLinks = [...document.querySelectorAll(".resume-toc a")];
-  const resumeSections = resumeLinks
-    .map((link) => document.querySelector(link.getAttribute("href")))
-    .filter(Boolean);
-
-  if (resumeSections.length && "IntersectionObserver" in window) {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        resumeLinks.forEach((link) => {
-          link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`);
-        });
-      });
-    }, { rootMargin: "-25% 0px -65%", threshold: 0 });
-
-    resumeSections.forEach((section) => sectionObserver.observe(section));
-  }
 });

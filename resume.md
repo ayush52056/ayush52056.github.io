@@ -8,20 +8,20 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
 <header class="resume-hero" id="profile">
   <p class="resume-role">Technical Lead · AI & Backend Engineering</p>
   <h1>Ayush<br>Singh<span>.</span></h1>
-  <p class="resume-summary">I build production systems at the intersection of agentic AI, retrieval, and backend engineering—from document-to-diagram workflows to multi-agent orchestration and developer tooling.</p>
+  <p class="resume-summary">I build production systems at the intersection of agentic AI, retrieval, and backend engineering, from document-to-diagram workflows to multi-agent orchestration and developer tooling.</p>
   <div class="resume-contact" aria-label="Contact links">
-    <a href="mailto:ayush.52056@gmail.com">Email <span>↗</span></a>
-    <a href="https://www.linkedin.com/in/ayush-singh-601951188/">LinkedIn <span>↗</span></a>
-    <a href="https://github.com/ayush52056">GitHub <span>↗</span></a>
+    <a href="mailto:ayush.52056@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/ayush-singh-601951188/">LinkedIn</a>
+    <a href="https://github.com/ayush52056">GitHub</a>
     <a href="tel:+919412722190">+91 94127 22190</a>
   </div>
 </header>
 
 <section class="resume-section" id="experience">
-  <div class="resume-section-title"><span>01</span><h2>Experience</h2></div>
+  <div class="resume-section-title"><h2>Experience</h2></div>
 
   <article class="experience-item">
-    <div class="experience-meta"><time>Jul 2026 — Present</time><span>Bengaluru, India</span></div>
+    <div class="experience-meta"><time>Jul 2026 - Present</time><span>Noida, India</span></div>
     <div class="experience-body">
       <h3>Technical Lead</h3>
       <p class="company">EY GDS <span>· EY Internal</span></p>
@@ -34,7 +34,7 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
   </article>
 
   <article class="experience-item">
-    <div class="experience-meta"><time>Oct 2024 — Jun 2026</time><span>Bengaluru, India</span></div>
+    <div class="experience-meta"><time>Oct 2024 - Jun 2026</time><span>Noida, India</span></div>
     <div class="experience-body">
       <h3>Specialist Programmer</h3>
       <p class="company">Infosys <span>· Danske Bank & Internal Platforms</span></p>
@@ -50,7 +50,7 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
   </article>
 
   <article class="experience-item">
-    <div class="experience-meta"><time>Aug 2021 — Oct 2024</time><span>Bengaluru, India</span></div>
+    <div class="experience-meta"><time>Aug 2021 - Oct 2024</time><span>Pune, India</span></div>
     <div class="experience-body">
       <h3>Systems Engineer</h3>
       <p class="company">Tata Consultancy Services <span>· Ericsson 5G NR</span></p>
@@ -66,7 +66,7 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
 </section>
 
 <section class="resume-section" id="skills">
-  <div class="resume-section-title"><span>02</span><h2>Capabilities</h2></div>
+  <div class="resume-section-title"><h2>Capabilities</h2></div>
   <div class="capability-grid">
     <div><p>01 / Engineering</p><h3>Python, SQL, JavaScript, React, FastAPI, REST APIs, OOP, MongoDB, system design</h3></div>
     <div><p>02 / Generative AI</p><h3>LLMs, Azure OpenAI, RAG, agentic AI, context and prompt engineering, tool calling, LangChain, LangGraph</h3></div>
@@ -77,31 +77,31 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
 </section>
 
 <section class="resume-section" id="projects">
-  <div class="resume-section-title"><span>03</span><h2>Selected Projects</h2></div>
+  <div class="resume-section-title"><h2>Selected Projects</h2></div>
   <div class="project-grid">
     <a class="project-card" href="https://ayush52056.pythonanywhere.com/blog/">
       <span>Web application</span><h3>Publishing platform</h3>
       <p>A deployed Django application with complete post creation, editing, updating, and deletion flows.</p>
-      <small>Python · Django · PostgreSQL <b>↗</b></small>
+      <small>Python · Django · PostgreSQL</small>
     </a>
     <a class="project-card" href="https://conut-ls.onrender.com/">
       <span>Developer tool</span><h3>Link shortener</h3>
       <p>A bit.ly-style web application that shortens URLs and reports click activity.</p>
-      <small>Django · Web analytics <b>↗</b></small>
+      <small>Django · Web analytics</small>
     </a>
   </div>
 </section>
 
 <section class="resume-section" id="education">
-  <div class="resume-section-title"><span>04</span><h2>Education</h2></div>
+  <div class="resume-section-title"><h2>Education</h2></div>
   <div class="education-row">
     <div><h3>Bachelor of Technology in Information Technology</h3><p>IMS Engineering College · Ghaziabad, Uttar Pradesh</p></div>
-    <div><time>2017 — 2021</time><strong>CGPA 8.86</strong></div>
+    <div><time>2017 - 2021</time><strong>CGPA 8.86</strong></div>
   </div>
 </section>
 
 <section class="resume-section" id="recognition">
-  <div class="resume-section-title"><span>05</span><h2>Recognition</h2></div>
+  <div class="resume-section-title"><h2>Recognition</h2></div>
   <ul class="recognition-list">
     <li><span>Microsoft</span><p>Azure Solutions Architect Expert, Azure Administrator Associate, Azure AI Fundamentals, Azure Data Fundamentals, and Azure Fundamentals</p></li>
     <li><span>AWS</span><p>Certified AI Practitioner</p></li>
@@ -110,8 +110,3 @@ description: Ayush Singh is a Technical Lead building agentic AI, RAG, backend, 
     <li><span>Hackathons</span><p>Winner of Microsoft’s Get Set Azure! Edition 2; first at SPARK-18 and third at SPARK-19.</p></li>
   </ul>
 </section>
-
-<footer class="resume-cta">
-  <p>Have a complex system to build?</p>
-  <a href="mailto:ayush.52056@gmail.com">Let’s talk <span>↗</span></a>
-</footer>
